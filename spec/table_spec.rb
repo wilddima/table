@@ -5,21 +5,21 @@ RSpec.describe Table do
     subject(:table) { my_table.new(data) }
 
     let(:data) do
-<<TEXT
-[
-  {
-    "name": "Alex Ivanov",
-    "age": 27,
-    "group": "admin"
-  },
-  {
-    "name": "Peter Scherbakov",
-    "age": 32,
-    "group": "accounting",
-    "permissions": [1,2,3]
-  }
-]
-TEXT
+      <<~TEXT
+      [
+        {
+          "name": "Alex Ivanov",
+          "age": 27,
+          "group": "admin"
+        },
+        {
+          "name": "Peter Scherbakov",
+          "age": 32,
+          "group": "accounting",
+          "permissions": [1,2,3]
+        }
+      ]
+      TEXT
     end
     let(:my_table) do
       Class.new(described_class) do
@@ -71,15 +71,25 @@ TEXT
         end
       end
       let(:data) do
-        [
-          {
-            "$!:#!@#!@": 27,
-          }
-        ].to_json
+        [{ "$!:#!@#!@": 27 }]
       end
 
       it 'raises an error' do
         expect { table }.to raise_error NameError
+      end
+    end
+
+    context 'when pass an array' do
+      let(:data) do
+        [{ name: "Alex Ivanov",
+           age: 27,
+           group: "admin" }]
+      end
+
+      it 'correct parses data' do
+        expect(table[0]).to have_attributes(name: 'Alex Ivanov',
+                                            age: 27,
+                                            group: 'admin')
       end
     end
   end

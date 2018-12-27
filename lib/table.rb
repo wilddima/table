@@ -23,7 +23,14 @@ class Table
   end
 
   def initialize(raw_data)
-    @data = JSON.parse(raw_data, symbolize_names: true)
-                .map { |row| Row.new(row, types: self.class.columns) }
+    @data = parse_data(raw_data).map { |row| Row.new(row, types: self.class.columns) }
+  end
+
+  private
+
+  def parse_data(raw_data)
+    return raw_data if raw_data.is_a? Array
+    return JSON.parse(raw_data, symbolize_names: true) if raw_data.is_a? String
+    raise TypeError, "Can't parse data: '#{raw_data}'. It should be an array or json."
   end
 end
