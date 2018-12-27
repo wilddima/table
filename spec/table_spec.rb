@@ -63,5 +63,24 @@ TEXT
         expect { table }.to raise_error KeyError
       end
     end
+
+    context 'when invalid column name' do
+      let(:my_table) do
+        Class.new(described_class) do
+          column :'$!:#!@#!@', type: Integer
+        end
+      end
+      let(:data) do
+        [
+          {
+            "$!:#!@#!@": 27,
+          }
+        ].to_json
+      end
+
+      it 'raises an error' do
+        expect { table }.to raise_error NameError
+      end
+    end
   end
 end
