@@ -1,6 +1,8 @@
 # table
 
 ```ruby
+require 'table'
+
 class MyTable < Table
   column :name, type: String
   column :age, type: Integer
