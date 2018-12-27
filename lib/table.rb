@@ -1,6 +1,6 @@
 require 'json'
 require 'forwardable'
-require 'row'
+require_relative 'row'
 
 class Table
   extend Forwardable
